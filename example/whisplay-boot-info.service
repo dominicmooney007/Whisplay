@@ -1,0 +1,16 @@
+[Unit]
+Description=Whisplay boot info (user + IP) on the LCD
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/dom/Whisplay/example/boot_info.py
+WorkingDirectory=/home/dom/Whisplay/example
+Restart=on-failure
+RestartSec=3
+# Needs root for SPI/GPIO/PWM access on the HAT.
+User=root
+
+[Install]
+WantedBy=multi-user.target
