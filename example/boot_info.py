@@ -25,6 +25,9 @@ from WhisPlay import WhisPlayBoard  # noqa: E402
 WIDTH = 240
 HEIGHT = 280
 
+BATTERY_BUS = 1
+BATTERY_ADDR = 0x36
+
 
 def pil_to_rgb565_bytes(img):
     """Convert a PIL RGB image to RGB565 big-endian bytes."""
@@ -107,7 +110,29 @@ def get_ip_addresses():
     return results
 
 
-def render(user, hostname, ip_pairs):
+def _i2c_read_word_be(bus, addr, reg):
+    raw = subprocess.check_output(
+        ["i2cget", "-y", str(bus), hex(addr), hex(reg), "w"],
+        text=True, stderr=subprocess.DEVNULL,
+    ).strip()
+    le = int(raw, 16)
+    return ((le & 0xFF) << 8) | ((le >> 8) & 0xFF)
+
+
+def read_battery():
+    """Read MAX17040-compatible fuel gauge.
+
+    Returns (percent, volts) or (None, None) if unreachable.
+    """
+    try:
+        vcell = _i2c_read_word_be(BATTERY_BUS, BATTERY_ADDR, 0x02)
+        soc = _i2c_read_word_be(BATTERY_BUS, BATTERY_ADDR, 0x04)
+    except (FileNotFoundError, subprocess.CalledProcessError, ValueError):
+        return None, None
+    return soc / 256.0, vcell * 78.125e-6
+
+
+def render(user, hostname, ip_pairs, battery):
     img = Image.new("RGB", (WIDTH, HEIGHT), (10, 14, 30))
     draw = ImageDraw.Draw(img)
 
@@ -116,31 +141,45 @@ def render(user, hostname, ip_pairs):
     value_font = load_font(20)
     small_font = load_font(13)
 
-    draw_centered(draw, "Whisplay", title_font, 14, (120, 200, 255))
+    draw_centered(draw, "STEM@PX", title_font, 14, (120, 200, 255))
     draw.line((20, 46, WIDTH - 20, 46), fill=(60, 90, 140))
 
-    y = 64
+    y = 56
     draw.text((16, y), "USER", fill=(150, 170, 200), font=label_font)
     draw.text((16, y + 18), user, fill=(255, 255, 255), font=value_font)
 
-    y = 116
+    y = 104
     draw.text((16, y), "HOST", fill=(150, 170, 200), font=label_font)
     draw.text((16, y + 18), hostname, fill=(255, 255, 255), font=value_font)
 
-    y = 168
+    y = 152
     draw.text((16, y), "IP", fill=(150, 170, 200), font=label_font)
     if not ip_pairs:
         draw.text((16, y + 18), "waiting for network...",
                   fill=(255, 180, 120), font=small_font)
     else:
-        for i, (iface, ip) in enumerate(ip_pairs[:3]):
+        for i, (iface, ip) in enumerate(ip_pairs[:2]):
             line_y = y + 18 + i * 22
             draw.text((16, line_y), f"{iface}", fill=(180, 220, 180),
                       font=small_font)
             draw.text((76, line_y), ip, fill=(255, 255, 255), font=value_font)
 
+    y = 218
+    draw.text((16, y), "BATT", fill=(150, 170, 200), font=label_font)
+    percent, volts = battery
+    if percent is None:
+        draw.text((16, y + 18), "n/a", fill=(180, 180, 180), font=value_font)
+    else:
+        pct_color = ((220, 80, 80) if percent < 20
+                     else (230, 200, 80) if percent < 50
+                     else (120, 220, 140))
+        draw.text((16, y + 18), f"{percent:.0f}%",
+                  fill=pct_color, font=value_font)
+        draw.text((90, y + 22), f"{volts:.2f} V",
+                  fill=(200, 210, 230), font=small_font)
+
     ts = time.strftime("%Y-%m-%d %H:%M:%S")
-    draw_centered(draw, ts, small_font, HEIGHT - 22, (140, 160, 190))
+    draw_centered(draw, ts, small_font, HEIGHT - 18, (140, 160, 190))
     return img
 
 
@@ -165,10 +204,14 @@ def main():
     try:
         while True:
             ip_pairs = get_ip_addresses()
+            percent, volts = read_battery()
+            pct_bucket = round(percent) if percent is not None else None
+            volts_bucket = round(volts, 2) if volts is not None else None
             payload = (user, hostname, tuple(ip_pairs),
+                       pct_bucket, volts_bucket,
                        time.strftime("%Y-%m-%d %H:%M"))
             if payload != last_payload:
-                img = render(user, hostname, ip_pairs)
+                img = render(user, hostname, ip_pairs, (percent, volts))
                 board.draw_image(0, 0, WIDTH, HEIGHT,
                                  pil_to_rgb565_bytes(img))
                 board.set_rgb(0, 80, 0) if ip_pairs else board.set_rgb(80, 40, 0)
