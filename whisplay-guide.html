@@ -1,0 +1,854 @@
+<title>Whisplay HAT — Student Guide</title>
+<style>
+  :root {
+    --bg: #F2F5F8;
+    --surface: #FFFFFF;
+    --surface-2: #E9EEF4;
+    --ink: #131922;
+    --ink-soft: #45525F;
+    --muted: #6C7A87;
+    --border: #DBE2EA;
+    --accent: #0E9E96;
+    --accent-strong: #0B7E79;
+    --accent-tint: #E1F3F1;
+    --code-bg: #0B1018;
+    --code-ink: #D7E2EE;
+    --code-cmt: #63768A;
+    --code-tag: #7FE9DD;
+    --warn-bg: #FCEFDF;
+    --warn-bd: #E7B577;
+    --warn-ink: #7A4E17;
+    --rgb-r: #F80000;
+    --rgb-g: #00C400;
+    --rgb-b: #2A2AF8;
+    --shadow: 0 1px 2px rgba(19,25,34,.05), 0 12px 30px -18px rgba(19,25,34,.28);
+    --maxw: 1180px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #090E15;
+      --surface: #10171F;
+      --surface-2: #161F2A;
+      --ink: #E8EEF4;
+      --ink-soft: #AAB7C3;
+      --muted: #7F8D9A;
+      --border: #212C39;
+      --accent: #2DD4C4;
+      --accent-strong: #57E7DA;
+      --accent-tint: #123030;
+      --code-bg: #0B1119;
+      --code-ink: #D7E2EE;
+      --code-cmt: #6A7C8F;
+      --code-tag: #7FE9DD;
+      --warn-bg: #2A2013;
+      --warn-bd: #6B4E22;
+      --warn-ink: #E8C185;
+      --rgb-r: #FF4D4D;
+      --rgb-g: #35D435;
+      --rgb-b: #5E7BFF;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 16px 34px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #F2F5F8; --surface: #FFFFFF; --surface-2: #E9EEF4; --ink: #131922;
+    --ink-soft: #45525F; --muted: #6C7A87; --border: #DBE2EA; --accent: #0E9E96;
+    --accent-strong: #0B7E79; --accent-tint: #E1F3F1; --code-bg: #0B1018; --code-ink: #D7E2EE;
+    --code-cmt: #63768A; --code-tag: #7FE9DD; --warn-bg: #FCEFDF; --warn-bd: #E7B577;
+    --warn-ink: #7A4E17; --rgb-r: #F80000; --rgb-g: #00C400; --rgb-b: #2A2AF8;
+    --shadow: 0 1px 2px rgba(19,25,34,.05), 0 12px 30px -18px rgba(19,25,34,.28);
+  }
+  :root[data-theme="dark"] {
+    --bg: #090E15; --surface: #10171F; --surface-2: #161F2A; --ink: #E8EEF4;
+    --ink-soft: #AAB7C3; --muted: #7F8D9A; --border: #212C39; --accent: #2DD4C4;
+    --accent-strong: #57E7DA; --accent-tint: #123030; --code-bg: #0B1119; --code-ink: #D7E2EE;
+    --code-cmt: #6A7C8F; --code-tag: #7FE9DD; --warn-bg: #2A2013; --warn-bd: #6B4E22;
+    --warn-ink: #E8C185; --rgb-r: #FF4D4D; --rgb-g: #35D435; --rgb-b: #5E7BFF;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 16px 34px -20px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent-strong); text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent); text-underline-offset: 2px; }
+  a:hover { text-decoration-color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    background:
+      radial-gradient(120% 90% at 85% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%),
+      var(--surface);
+  }
+  .hero-inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: clamp(2.4rem, 5vw, 4rem) 2rem clamp(2rem, 4vw, 3rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+  }
+  .eyebrow {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: .72rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--accent-strong);
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--accent); }
+  h1 {
+    font-size: clamp(2.1rem, 5.2vw, 3.3rem);
+    line-height: 1.04;
+    letter-spacing: -.02em;
+    margin: 0;
+    text-wrap: balance;
+    font-weight: 800;
+  }
+  h1 .cy { color: var(--accent-strong); }
+  .lede {
+    margin: 1.1rem 0 0;
+    max-width: 46ch;
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+  }
+  .hero-meta {
+    margin-top: 1.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+  .chip {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: .72rem;
+    letter-spacing: .02em;
+    padding: .34rem .66rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .callout-fix {
+    margin-top: 1.5rem;
+    padding: .85rem 1rem;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-tint);
+    border-radius: 0 8px 8px 0;
+    font-size: .95rem;
+    color: var(--ink-soft);
+    max-width: 52ch;
+  }
+  .callout-fix b { color: var(--ink); }
+
+  /* ---------- Device mockup ---------- */
+  .device { display: grid; justify-items: center; gap: .8rem; }
+  .board {
+    width: 214px;
+    padding: 20px 19px 26px;
+    border-radius: 26px;
+    background: linear-gradient(160deg, #1b2531, #0d131c);
+    border: 1px solid rgba(255,255,255,.06);
+    box-shadow: 0 20px 45px -20px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.05);
+    position: relative;
+  }
+  .board::after {
+    content: "WHISPLAY";
+    position: absolute;
+    bottom: 8px; left: 0; right: 0;
+    text-align: center;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: .5rem;
+    letter-spacing: .32em;
+    color: rgba(255,255,255,.28);
+  }
+  .screen {
+    width: 100%;
+    aspect-ratio: 240 / 280;
+    border-radius: 9px;
+    background: #0B1018;
+    border: 1px solid #26313f;
+    box-shadow: inset 0 0 26px rgba(0,0,0,.6), 0 0 0 3px #05080d;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    color: #fff;
+    position: relative;
+  }
+  .screen .hello {
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: -.01em;
+    text-shadow: 0 0 16px color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+  .screen .res {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: .62rem;
+    letter-spacing: .12em;
+    color: #6f8091;
+    margin-top: .5rem;
+  }
+  .led {
+    position: absolute;
+    top: 9px; right: 9px;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--accent-strong);
+    box-shadow: 0 0 10px 2px var(--accent-strong);
+  }
+  .btn-nub {
+    position: absolute;
+    right: -4px; top: 52%;
+    width: 5px; height: 34px;
+    border-radius: 3px;
+    background: #2a3644;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .led { animation: ledcycle 6s linear infinite; }
+    @keyframes ledcycle {
+      0%   { background:#ff4d4d; box-shadow:0 0 10px 2px #ff4d4d; }
+      33%  { background:#35d435; box-shadow:0 0 10px 2px #35d435; }
+      66%  { background:#5e7bff; box-shadow:0 0 10px 2px #5e7bff; }
+      100% { background:#ff4d4d; box-shadow:0 0 10px 2px #ff4d4d; }
+    }
+  }
+  .device-cap {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: .68rem;
+    letter-spacing: .06em;
+    color: var(--muted);
+  }
+
+  /* ---------- Layout ---------- */
+  .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .toc {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    padding: 2.6rem 0;
+  }
+  .toc-title {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: .68rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 1rem;
+  }
+  .toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .12rem; }
+  .toc a {
+    display: flex;
+    gap: .7rem;
+    align-items: baseline;
+    padding: .32rem .5rem;
+    border-radius: 7px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: .9rem;
+    line-height: 1.3;
+    border-left: 2px solid transparent;
+  }
+  .toc a .n {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: .72rem;
+    color: var(--muted);
+    min-width: 1.3em;
+  }
+  .toc a:hover { background: var(--surface-2); color: var(--ink); }
+  .toc a.active {
+    color: var(--accent-strong);
+    background: var(--accent-tint);
+    border-left-color: var(--accent);
+  }
+  .toc a.active .n { color: var(--accent-strong); }
+
+  main { padding: 2.6rem 0 4rem; min-width: 0; }
+  article { max-width: 72ch; }
+
+  section { scroll-margin-top: 1.5rem; padding-top: 1.4rem; }
+  section + section { margin-top: 2.6rem; border-top: 1px solid var(--border); }
+  h2 {
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.15;
+    letter-spacing: -.015em;
+    margin: 0 0 1rem;
+    text-wrap: balance;
+    display: flex;
+    align-items: baseline;
+    gap: .7rem;
+  }
+  h2 .num {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--accent-strong);
+    padding-top: .1em;
+  }
+  h3 {
+    font-size: 1.12rem;
+    margin: 2rem 0 .7rem;
+    letter-spacing: -.01em;
+  }
+  p { margin: 0 0 1rem; }
+  article ul, article ol.steps { padding-left: 1.3rem; margin: 0 0 1rem; }
+  article li { margin: .3rem 0; }
+  strong { color: var(--ink); font-weight: 650; }
+
+  code {
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: .86em;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: .1em .38em;
+    border-radius: 5px;
+    word-break: break-word;
+  }
+
+  /* ---------- Code blocks ---------- */
+  .code {
+    position: relative;
+    background: var(--code-bg);
+    border: 1px solid #1c2632;
+    border-radius: 12px;
+    margin: 0 0 1.3rem;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .code .tag {
+    position: absolute;
+    top: 10px; right: 12px;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: .62rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--code-tag);
+    opacity: .8;
+    user-select: none;
+  }
+  .code pre {
+    margin: 0;
+    padding: 1.05rem 1.1rem;
+    overflow-x: auto;
+    font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: .82rem;
+    line-height: 1.65;
+    color: var(--code-ink);
+    tab-size: 2;
+  }
+  .code pre code { background: none; border: 0; padding: 0; font-size: inherit; color: inherit; }
+  .cmt { color: var(--code-cmt); font-style: italic; }
+
+  /* ---------- Tables ---------- */
+  .table-wrap { overflow-x: auto; margin: 0 0 1.3rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { text-align: left; padding: .62rem .9rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  thead th {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--surface-2);
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td code { white-space: nowrap; }
+
+  /* ---------- Callout ---------- */
+  .note {
+    display: flex;
+    gap: .8rem;
+    padding: .9rem 1.1rem;
+    border-radius: 10px;
+    background: var(--accent-tint);
+    border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+    margin: 0 0 1.3rem;
+    font-size: .95rem;
+    color: var(--ink-soft);
+  }
+  .note .ic { color: var(--accent-strong); flex: none; font-weight: 700; }
+  .note b { color: var(--ink); }
+  .warn { background: var(--warn-bg); border-color: var(--warn-bd); color: var(--warn-ink); }
+  .warn .ic { color: var(--warn-ink); }
+  .warn b { color: var(--warn-ink); }
+
+  /* ---------- RGB565 swatches ---------- */
+  .swatches { display: flex; flex-wrap: wrap; gap: .6rem; margin: 0 0 1.3rem; }
+  .sw {
+    display: flex; align-items: center; gap: .55rem;
+    padding: .4rem .7rem .4rem .5rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: .76rem;
+  }
+  .sw .dot { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.18); }
+  .sw b { color: var(--ink); font-family: inherit; }
+  .sw span { color: var(--muted); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .foot-inner { max-width: var(--maxw); margin: 0 auto; padding: 2.4rem 2rem 3rem; }
+  .foot-inner h2 { font-size: 1.1rem; border: 0; margin-bottom: .8rem; }
+  .foot-inner ul { padding-left: 1.2rem; margin: 0; color: var(--ink-soft); font-size: .93rem; }
+  .foot-inner li { margin: .35rem 0; }
+  .colophon { margin-top: 1.6rem; font-size: .8rem; color: var(--muted); font-family: ui-monospace, Menlo, monospace; letter-spacing: .03em; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 920px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .device { justify-self: start; }
+    .wrap { grid-template-columns: 1fr; gap: 0; }
+    .toc {
+      position: static;
+      padding: 1.6rem 0 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .toc ol { flex-direction: row; overflow-x: auto; gap: .4rem; padding-bottom: 1rem; }
+    .toc a { border-left: 0; border-bottom: 2px solid transparent; white-space: nowrap; }
+    .toc a.active { border-left: 0; border-bottom-color: var(--accent); }
+    main { padding-top: 1.6rem; }
+  }
+  @media (max-width: 520px) {
+    .hero-inner, .wrap, .foot-inner { padding-left: 1.2rem; padding-right: 1.2rem; }
+  }
+</style>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <p class="eyebrow">PiSugar Whisplay HAT · Beginner Guide</p>
+      <h1>Talk, see &amp; blink on a <span class="cy">tiny&nbsp;screen</span>.</h1>
+      <p class="lede">A hands-on tutorial for students. Draw to the LCD, play sounds, record the mic, light the RGB LED, and read the button — then wire them into a small app.</p>
+      <div class="hero-meta">
+        <span class="chip">240 × 280 IPS LCD</span>
+        <span class="chip">WM8960 audio</span>
+        <span class="chip">RGB LED + button</span>
+        <span class="chip">Python</span>
+      </div>
+      <p class="callout-fix"><b>Quick fact-check:</b> the Whisplay screen is a 1.69" IPS <b>LCD</b> (driver ST7789P3), <b>not</b> an OLED — a full-colour 240×280 display over SPI. Everything here assumes that LCD.</p>
+    </div>
+    <div class="device" aria-hidden="true">
+      <div class="board">
+        <span class="led"></span>
+        <span class="btn-nub"></span>
+        <div class="screen">
+          <div class="hello">Hello!</div>
+          <div class="res">240 × 280</div>
+        </div>
+      </div>
+      <div class="device-cap">the HAT you're programming</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Contents">
+    <p class="toc-title">Contents</p>
+    <ol>
+      <li><a href="#s1"><span class="n">01</span> What is the Whisplay HAT?</a></li>
+      <li><a href="#s2"><span class="n">02</span> One-time setup</a></li>
+      <li><a href="#s3"><span class="n">03</span> Connecting to the hardware</a></li>
+      <li><a href="#s4"><span class="n">04</span> The screen &amp; displaying</a></li>
+      <li><a href="#s5"><span class="n">05</span> Playing sounds</a></li>
+      <li><a href="#s6"><span class="n">06</span> Recording the mic</a></li>
+      <li><a href="#s7"><span class="n">07</span> The RGB LED</a></li>
+      <li><a href="#s8"><span class="n">08</span> The button</a></li>
+      <li><a href="#s9"><span class="n">09</span> The backlight</a></li>
+      <li><a href="#s10"><span class="n">10</span> A tiny app</a></li>
+      <li><a href="#s11"><span class="n">11</span> The daemon</a></li>
+      <li><a href="#s12"><span class="n">12</span> Troubleshooting</a></li>
+      <li><a href="#s13"><span class="n">13</span> Quick API reference</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <article>
+      <section id="s1">
+        <h2><span class="num">01</span> What is the Whisplay HAT?</h2>
+        <p>The Whisplay HAT is an add-on board ("HAT") that snaps onto a Raspberry Pi Zero / Zero 2 W / Pi 5 (and some Radxa boards) using the 40-pin header. It packs a screen, audio, a light, and a button onto one small board so you can build talk-and-see projects like AI chatbots.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Feature</th><th>Spec</th><th>Connects via</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Screen</strong></td><td>1.69" IPS LCD, <strong>240×280</strong> px, full colour (RGB565)</td><td>SPI</td></tr>
+              <tr><td><strong>Audio codec</strong></td><td>WM8960 (hi-fi)</td><td>I2C (control) + I2S (audio)</td></tr>
+              <tr><td><strong>Microphone</strong></td><td>Dual mics (stereo)</td><td>WM8960 / I2S</td></tr>
+              <tr><td><strong>Speaker</strong></td><td>Onboard + external speaker support</td><td>WM8960 / I2S</td></tr>
+              <tr><td><strong>RGB LED</strong></td><td>One programmable colour LED</td><td>GPIO (software PWM)</td></tr>
+              <tr><td><strong>Button</strong></td><td>One programmable push button</td><td>GPIO</td></tr>
+              <tr><td><strong>Backlight</strong></td><td>Adjustable screen brightness</td><td>GPIO (software PWM)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The three buses matter later for troubleshooting: <strong>SPI</strong> drives the LCD, and <strong>I2C + I2S</strong> drive the audio. The installer enables all of them for you.</p>
+      </section>
+
+      <section id="s2">
+        <h2><span class="num">02</span> One-time setup</h2>
+        <p>Do this once per Pi. All the hardware demos need to run as <strong>root</strong> (<code>sudo</code>) because they talk directly to GPIO and SPI.</p>
+        <div class="code"><span class="tag">bash</span><pre><code><span class="cmt"># 1. Get the code and install the driver (enables SPI, I2C, I2S)</span>
+git clone https://github.com/PiSugar/Whisplay.git --depth 1
+cd Whisplay
+sudo bash install_driver.sh
+sudo reboot            <span class="cmt"># reboot is required for the bus changes to take effect</span>
+
+<span class="cmt"># 2. Install the Python libraries used by the examples</span>
+cd example
+pip install -r requirements.txt --break-system-packages
+<span class="cmt">#   pulls in: pygame, Pillow, spidev, gpiod</span></code></pre></div>
+        <p><strong>Check the audio card is present</strong> after reboot — you should see a card named <code>whisplaysound</code> (older boards may show <code>wm8960</code> or <code>es8389</code>):</p>
+        <div class="code"><span class="tag">bash</span><pre><code>aplay -l                 <span class="cmt"># lists playback devices</span>
+cat /proc/asound/cards   <span class="cmt"># the Whisplay card should be here</span></code></pre></div>
+        <div class="note"><span class="ic">i</span><div>If you don't see the card, re-run the installer and check the wiring — audio won't work until this card appears.</div></div>
+      </section>
+
+      <section id="s3">
+        <h2><span class="num">03</span> Connecting to the hardware</h2>
+        <p>There are <strong>two ways</strong> your program can control the board, and only one program can own the hardware at a time:</p>
+        <ul>
+          <li><strong>Direct mode</strong> — your script talks straight to the LCD/GPIO. Simplest for learning. Use when nothing else is running the screen.</li>
+          <li><strong>Daemon mode</strong> — a background service (<code>whisplay-daemon</code>) owns the hardware and your app draws through it. Used for an app launcher, or several apps sharing the board (see §11).</li>
+        </ul>
+        <p>The good news: <strong>the same helper works for both.</strong> <code>create_whisplay_hardware(...)</code> returns a daemon client if the daemon is running, otherwise it falls back to direct hardware. The methods (<code>draw_image</code>, <code>set_rgb</code>, <code>on_button_press</code>, …) are identical either way, so the code you learn here is portable.</p>
+        <p>For the plain "just talk to the hardware" path you can also import the board class directly:</p>
+        <div class="code"><span class="tag">python</span><pre><code>from whisplay import WhisplayBoard   <span class="cmt"># runtime/whisplay.py</span>
+board = WhisplayBoard()              <span class="cmt"># grabs the LCD, LED, button, backlight</span>
+<span class="cmt"># ... use it ...</span>
+board.cleanup()                      <span class="cmt"># ALWAYS release the hardware when done</span></code></pre></div>
+        <p>All examples below assume you have a <code>board</code> object from one of those two calls.</p>
+      </section>
+
+      <section id="s4">
+        <h2><span class="num">04</span> The screen — how displaying works</h2>
+
+        <h3>4.1 &nbsp;The key idea: colours are RGB565</h3>
+        <p>The LCD stores each pixel as a <strong>16-bit number</strong> — not the 24-bit <code>#RRGGBB</code> you may know from the web. This format is <strong>RGB565</strong>: 5 bits red, 6 bits green, 5 bits blue. Convert a normal (r, g, b) triple (0–255 each) like this:</p>
+        <div class="code"><span class="tag">python</span><pre><code>def to_rgb565(r, g, b):
+    return ((r &amp; 0xF8) &lt;&lt; 8) | ((g &amp; 0xFC) &lt;&lt; 3) | (b &gt;&gt; 3)</code></pre></div>
+        <div class="swatches">
+          <span class="sw"><span class="dot" style="background:var(--rgb-r)"></span><b>RED</b> <span>0xF800</span></span>
+          <span class="sw"><span class="dot" style="background:var(--rgb-g)"></span><b>GREEN</b> <span>0x07E0</span></span>
+          <span class="sw"><span class="dot" style="background:var(--rgb-b)"></span><b>BLUE</b> <span>0x001F</span></span>
+          <span class="sw"><span class="dot" style="background:#fff"></span><b>WHITE</b> <span>0xFFFF</span></span>
+          <span class="sw"><span class="dot" style="background:#0B1018"></span><b>BLACK</b> <span>0x0000</span></span>
+        </div>
+
+        <h3>4.2 &nbsp;The simplest drawing calls</h3>
+        <div class="code"><span class="tag">python</span><pre><code>board.fill_screen(RED)                   <span class="cmt"># fill the whole 240x280 screen</span>
+board.draw_pixel(120, 140, WHITE)        <span class="cmt"># one pixel (x 0..239, y 0..279)</span>
+board.draw_line(0, 0, 239, 279, GREEN)   <span class="cmt"># a line between two points</span></code></pre></div>
+        <ul>
+          <li><code>x</code> runs <strong>0 → 239</strong> (width = 240), <code>y</code> runs <strong>0 → 279</strong> (height = 280).</li>
+          <li>These live on <code>board.LCD_WIDTH</code> and <code>board.LCD_HEIGHT</code> if you'd rather not hard-code them.</li>
+        </ul>
+        <p><code>draw_pixel</code> and <code>draw_line</code> are handy but <strong>slow</strong> (one SPI round-trip per pixel). For anything real — text, images, shapes — draw into an image first, then push the whole frame at once (next section).</p>
+
+        <h3>4.3 &nbsp;Displaying text and images with Pillow</h3>
+        <p>You build a picture with <strong>Pillow (PIL)</strong>, convert it to RGB565 bytes, and blit the whole frame with <code>draw_image</code>. This is how every real Whisplay app draws.</p>
+        <div class="code"><span class="tag">python</span><pre><code>from PIL import Image, ImageDraw, ImageFont
+
+W, H = board.LCD_WIDTH, board.LCD_HEIGHT   <span class="cmt"># 240 x 280</span>
+
+def image_to_rgb565(img):
+    <span class="cmt">"""Convert a PIL RGB image to the bytes the LCD wants."""</span>
+    rgb = img.convert("RGB")
+    out = bytearray()
+    for y in range(rgb.height):
+        for x in range(rgb.width):
+            r, g, b = rgb.getpixel((x, y))
+            v = ((r &amp; 0xF8) &lt;&lt; 8) | ((g &amp; 0xFC) &lt;&lt; 3) | (b &gt;&gt; 3)
+            out.append((v &gt;&gt; 8) &amp; 0xFF)   <span class="cmt"># high byte first (big-endian)</span>
+            out.append(v &amp; 0xFF)
+    return bytes(out)
+
+<span class="cmt"># Draw "Hello!" in white on a dark blue background</span>
+img  = Image.new("RGB", (W, H), (11, 16, 24))
+draw = ImageDraw.Draw(img)
+font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 28)
+draw.text((30, 120), "Hello!", fill=(255, 255, 255), font=font)
+
+board.draw_image(0, 0, W, H, image_to_rgb565(img))</code></pre></div>
+        <p><code>draw_image(x, y, width, height, pixel_data)</code> writes a block of RGB565 bytes to a rectangle. To replace the whole screen, use <code>x=0, y=0, width=240, height=280</code>. The pixel data must be exactly <code>width × height × 2</code> bytes or you'll get an error.</p>
+        <p><strong>Showing a photo</strong> is the same idea — open it, resize to the screen, convert, blit:</p>
+        <div class="code"><span class="tag">python</span><pre><code>photo = Image.open("cat.png").resize((W, H))
+board.draw_image(0, 0, W, H, image_to_rgb565(photo))</code></pre></div>
+        <div class="note"><span class="ic">⚡</span><div><b>Speed tip:</b> the pixel-by-pixel loop above is easy to read but slow. In daemon mode there's a fast built-in <code>image_to_rgb565_bytes(img)</code> in <code>daemon/daemon_shared.py</code>. For direct-mode animation, convert with NumPy instead of a Python loop.</div></div>
+      </section>
+
+      <section id="s5">
+        <h2><span class="num">05</span> Playing sounds through the speaker</h2>
+        <p>Audio does <strong>not</strong> go through the <code>board</code> object — it goes through the <strong>WM8960 sound card</strong> using standard Linux ALSA tools (<code>aplay</code> to play, <code>arecord</code> to record). Your Python code just runs those tools.</p>
+        <div class="note warn"><span class="ic">⚠</span><div><b>Find your card index first.</b> The <code>-c 1</code> / <code>plughw:1</code> in the examples below is only a placeholder — the Whisplay card's number <b>varies by machine</b> (on a Raspberry Pi 5 it's often <b>2</b>, not 1). Check yours with <code>aplay -l</code> or <code>cat /proc/asound/cards</code> and use that number. Easiest: pass <code>-D whisplaysound</code> to <code>aplay</code>/<code>arecord</code> instead of a numeric device, and the index never matters.</div></div>
+
+        <h3>5.1 &nbsp;Set the volume once (mixer)</h3>
+        <p>The codec starts muted/quiet. Turn up the speaker (replace <code>1</code> with your card index — see the note above):</p>
+        <div class="code"><span class="tag">bash</span><pre><code>amixer -c 1 sset 'Speaker' 121
+amixer -c 1 sset 'Playback' 230
+amixer -c 1 sset 'Left Output Mixer PCM' on
+amixer -c 1 sset 'Right Output Mixer PCM' on</code></pre></div>
+
+        <h3>5.2 &nbsp;Play a WAV file</h3>
+        <p>From the terminal:</p>
+        <div class="code"><span class="tag">bash</span><pre><code>aplay -D whisplaysound test.wav               <span class="cmt"># newer boards</span>
+<span class="cmt"># or, using the card name from /proc/asound/cards:</span>
+aplay -D plughw:CARD=whisplaysound test.wav</code></pre></div>
+        <p>From Python (exactly the pattern the official test uses):</p>
+        <div class="code"><span class="tag">python</span><pre><code>import subprocess
+
+def play_wav(path, device="whisplaysound"):
+    subprocess.run(["aplay", "-D", device, path], check=False)
+
+play_wav("test.wav")</code></pre></div>
+        <p>If <code>whisplaysound</code> doesn't work, fall back to <code>plughw:&lt;card_index&gt;</code> (e.g. <code>plughw:1</code>). The demos try <code>whisplaysound</code> first, then <code>default</code>, then <code>plughw:</code>.</p>
+      </section>
+
+      <section id="s6">
+        <h2><span class="num">06</span> Recording from the microphone</h2>
+        <p>Recording uses <code>arecord</code>. The Whisplay has <strong>dual mics</strong>, so record in stereo at 48 kHz, 16-bit — the codec's native format:</p>
+        <div class="code"><span class="tag">bash</span><pre><code>arecord -D whisplaysound -f S16_LE -r 48000 -c 2 -t wav -d 5 my_recording.wav
+<span class="cmt">#        device          16-bit    48kHz  stereo  wav  5 sec  output file</span></code></pre></div>
+        <p>Boost the mic first if it's too quiet:</p>
+        <div class="code"><span class="tag">bash</span><pre><code>amixer -c 1 sset 'Capture' 45
+amixer -c 1 sset 'ADC PCM' 195
+amixer -c 1 sset 'Left Input Mixer Boost'  on
+amixer -c 1 sset 'Right Input Mixer Boost' on</code></pre></div>
+        <p><strong>Record-then-play-back in Python</strong> (a classic "did the mic work?" loop):</p>
+        <div class="code"><span class="tag">python</span><pre><code>import subprocess
+
+DEV = "whisplaysound"
+
+<span class="cmt"># Record 5 seconds</span>
+subprocess.run(["arecord", "-D", DEV, "-f", "S16_LE", "-r", "48000",
+                "-c", "2", "-t", "wav", "-d", "5", "clip.wav"], check=False)
+
+<span class="cmt"># Play it back</span>
+subprocess.run(["aplay", "-D", DEV, "clip.wav"], check=False)</code></pre></div>
+        <p>A common interactive pattern is <strong>hold-the-button to record, release to stop</strong> — start <code>arecord</code> on button-press and send it <code>SIGINT</code> on release (see <code>example/test.py</code> for the full version).</p>
+      </section>
+
+      <section id="s7">
+        <h2><span class="num">07</span> The RGB LED</h2>
+        <p>One LED, any colour. Values are 0–255 per channel, just like normal RGB.</p>
+        <div class="code"><span class="tag">python</span><pre><code>board.set_rgb(255, 0, 0)     <span class="cmt"># red</span>
+board.set_rgb(0, 255, 0)     <span class="cmt"># green</span>
+board.set_rgb(0, 0, 255)     <span class="cmt"># blue</span>
+board.set_rgb(255, 255, 255) <span class="cmt"># white</span>
+board.set_rgb(0, 0, 0)       <span class="cmt"># off</span>
+
+<span class="cmt"># Smoothly fade to a colour over 500 ms</span>
+board.set_rgb_fade(0, 180, 255, duration_ms=500)</code></pre></div>
+        <p>Great for status: e.g. green = ready, red = recording, blue = thinking.</p>
+      </section>
+
+      <section id="s8">
+        <h2><span class="num">08</span> The button</h2>
+        <p>There's <strong>one</strong> push button. You can react to it two ways.</p>
+        <p><strong>Event callbacks</strong> (recommended — runs in the background):</p>
+        <div class="code"><span class="tag">python</span><pre><code>def on_press():
+    print("pressed!")
+    board.set_rgb(0, 180, 255)
+
+def on_release():
+    print("released!")
+    board.set_rgb(0, 0, 0)
+
+board.on_button_press(on_press)
+board.on_button_release(on_release)</code></pre></div>
+        <p><strong>Polling</strong> (check the state yourself in a loop):</p>
+        <div class="code"><span class="tag">python</span><pre><code>if board.button_pressed():
+    print("the button is down right now")</code></pre></div>
+      </section>
+
+      <section id="s9">
+        <h2><span class="num">09</span> The backlight</h2>
+        <p>Control screen brightness from 0 (off) to 100 (full):</p>
+        <div class="code"><span class="tag">python</span><pre><code>board.set_backlight(70)   <span class="cmt"># 70% brightness</span>
+board.set_backlight(0)    <span class="cmt"># screen dark (backlight off)</span>
+board.set_backlight(100)  <span class="cmt"># brightest</span></code></pre></div>
+        <p>Turning the backlight down is a nice way to save power when the screen isn't needed.</p>
+      </section>
+
+      <section id="s10">
+        <h2><span class="num">10</span> Putting it together: a tiny app</h2>
+        <p>This shows the screen, LED, and button working together. Save as <code>hello_whisplay.py</code> and run with <code>sudo python3 hello_whisplay.py</code> from the <code>example/</code> folder.</p>
+        <div class="code"><span class="tag">python</span><pre><code>import os, sys, time
+from PIL import Image, ImageDraw, ImageFont
+
+<span class="cmt"># make runtime/ importable</span>
+RUNTIME = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "runtime"))
+sys.path.append(RUNTIME)
+from whisplay_client import create_whisplay_hardware
+
+board = create_whisplay_hardware(app_id="hello", display_name="Hello", icon="H")
+W, H = board.LCD_WIDTH, board.LCD_HEIGHT
+font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 26)
+presses = 0
+
+def to565(img):
+    rgb = img.convert("RGB"); out = bytearray()
+    for y in range(rgb.height):
+        for x in range(rgb.width):
+            r, g, b = rgb.getpixel((x, y))
+            v = ((r &amp; 0xF8) &lt;&lt; 8) | ((g &amp; 0xFC) &lt;&lt; 3) | (b &gt;&gt; 3)
+            out += bytes([(v &gt;&gt; 8) &amp; 0xFF, v &amp; 0xFF])
+    return bytes(out)
+
+def show(text):
+    img = Image.new("RGB", (W, H), (11, 16, 24))
+    ImageDraw.Draw(img).text((24, 120), text, fill=(255, 255, 255), font=font)
+    board.draw_image(0, 0, W, H, to565(img))
+
+def pressed():
+    global presses
+    presses += 1
+    board.set_rgb(0, 200, 120)
+    show(f"Presses: {presses}")
+
+def released():
+    board.set_rgb(0, 0, 0)
+
+board.set_backlight(80)
+board.on_button_press(pressed)
+board.on_button_release(released)
+show("Press the button!")
+
+try:
+    while True:
+        time.sleep(0.1)
+except KeyboardInterrupt:
+    pass
+finally:
+    board.cleanup()   <span class="cmt"># always clean up!</span></code></pre></div>
+        <p>Try the ready-made demos too, all in <code>example/</code> (run with <code>sudo</code>):</p>
+        <div class="code"><span class="tag">bash</span><pre><code>cd example
+sudo bash run_test.sh          <span class="cmt"># full guided screen/LED/speaker/button/mic test</span>
+sudo python3 flappy_bird.py    <span class="cmt"># one-button game</span>
+sudo python3 jump_game.py      <span class="cmt"># one-button game</span>
+sudo python3 play_mp4.py --file data/whisplay_test.mp4   <span class="cmt"># video (needs ffmpeg)</span></code></pre></div>
+      </section>
+
+      <section id="s11">
+        <h2><span class="num">11</span> Bonus: the Whisplay Daemon</h2>
+        <p>Once you're comfortable, the <strong>daemon</strong> turns the HAT into a little app console. It owns the hardware and shows a desktop of apps you can switch between with the button.</p>
+        <div class="code"><span class="tag">bash</span><pre><code>sudo bash daemon/install_whisplay_daemon_service.sh
+systemctl status whisplay-daemon.service --no-pager</code></pre></div>
+        <p>Desktop gestures: <strong>single-click</strong> cycles the selected app, <strong>long-press</strong> launches it, and <strong>4 quick clicks</strong> exit back to the desktop. It even has built-in <strong>Bluetooth, Wi-Fi, and Volume</strong> pages.</p>
+        <p>To make your own app appear on the desktop, register it and drop a small JSON file in <code>~/.whisplay-daemon/app/</code>. Because <code>create_whisplay_hardware()</code> already speaks the daemon protocol, <strong>your app code barely changes</strong> — you just also register callbacks for <code>on_exit_request</code> (user asked to quit) and <code>on_focus_revoked</code> (daemon took the screen back):</p>
+        <div class="code"><span class="tag">python</span><pre><code>if hasattr(board, "on_exit_request"):
+    board.on_exit_request(lambda *_: stop())
+if hasattr(board, "on_focus_revoked"):
+    board.on_focus_revoked(lambda *_: stop())</code></pre></div>
+        <p>Full details: <code>APP_INTEGRATION.md</code> and <code>daemon/skills/create-app/SKILL.md</code> in this repo.</p>
+      </section>
+
+      <section id="s12">
+        <h2><span class="num">12</span> Troubleshooting</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Problem</th><th>Likely cause / fix</th></tr></thead>
+            <tbody>
+              <tr><td>Screen stays black</td><td>Backlight at 0 — call <code>board.set_backlight(80)</code>. Also confirm you ran the installer and rebooted.</td></tr>
+              <tr><td><code>Permission denied</code> / GPIO errors</td><td>Run with <code>sudo</code>. Direct hardware access needs root.</td></tr>
+              <tr><td>Only one program can use the screen</td><td>The daemon may be holding the hardware. Stop it: <code>sudo systemctl stop whisplay-daemon</code>.</td></tr>
+              <tr><td>No sound / no card</td><td>Check <code>cat /proc/asound/cards</code> for <code>whisplaysound</code>. Re-run the installer; turn up the mixer (§5.1).</td></tr>
+              <tr><td>Sound too quiet</td><td>Raise <code>Speaker</code>/<code>Playback</code> (playback) or <code>Capture</code>/<code>ADC PCM</code> (record) with <code>amixer</code>.</td></tr>
+              <tr><td><code>device ... not found</code></td><td>Use your real card index: <code>aplay -D plughw:1 file.wav</code>.</td></tr>
+              <tr><td>Colours look wrong</td><td>You probably sent 24-bit RGB — the LCD needs <strong>RGB565</strong> (§4.1).</td></tr>
+              <tr><td>"exceeds screen bounds" error</td><td>Your <code>draw_image</code> region is bigger than 240×280, or byte count ≠ <code>w×h×2</code>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note warn"><span class="ic">⚠</span><div><b>Radxa Cubie A7Z owners:</b> do <b>not</b> press the physical button on that board — a circuit incompatibility can cut power instantly. (Raspberry Pi is fine.)</div></div>
+      </section>
+
+      <section id="s13">
+        <h2><span class="num">13</span> Quick API reference</h2>
+        <p>Methods on the <code>board</code> object:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Call</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td><code>fill_screen(color565)</code></td><td>Fill the whole screen with one RGB565 colour</td></tr>
+              <tr><td><code>draw_pixel(x, y, color565)</code></td><td>Set one pixel (slow)</td></tr>
+              <tr><td><code>draw_line(x0, y0, x1, y1, color565)</code></td><td>Draw a line (slow)</td></tr>
+              <tr><td><code>draw_image(x, y, w, h, rgb565_bytes)</code></td><td>Blit a block of pixels (the fast, normal way)</td></tr>
+              <tr><td><code>set_backlight(0–100)</code></td><td>Screen brightness</td></tr>
+              <tr><td><code>set_rgb(r, g, b)</code></td><td>LED colour, 0–255 each</td></tr>
+              <tr><td><code>set_rgb_fade(r, g, b, duration_ms)</code></td><td>Smoothly fade the LED</td></tr>
+              <tr><td><code>button_pressed()</code></td><td><code>True</code> if the button is down now</td></tr>
+              <tr><td><code>on_button_press(fn)</code> / <code>on_button_release(fn)</code></td><td>Button event callbacks</td></tr>
+              <tr><td><code>on_exit_request(fn)</code> / <code>on_focus_revoked(fn)</code></td><td>Daemon-mode lifecycle callbacks</td></tr>
+              <tr><td><code>cleanup()</code></td><td>Release the hardware — always call when finished</td></tr>
+              <tr><td><code>LCD_WIDTH</code> (240) / <code>LCD_HEIGHT</code> (280)</td><td>Screen size constants</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Audio is separate: use <code>aplay</code> (play) and <code>arecord</code> (record) on the <code>whisplaysound</code> ALSA card, and <code>amixer</code> to set levels.</p>
+      </section>
+    </article>
+  </main>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <h2>Sources</h2>
+    <ul>
+      <li><a href="https://docs.pisugar.com/docs/product-wiki/whisplay/intro">Whisplay HAT — PiSugar Docs (intro)</a></li>
+      <li><a href="https://docs.pisugar.com/docs/product-wiki/whisplay/overview">Product Overview — PiSugar Docs</a></li>
+      <li><a href="https://www.pisugar.com/products/whisplay-hat-for-pi-zero-2w-audio-display">Whisplay HAT product page — PiSugar</a></li>
+      <li><a href="https://github.com/PiSugar/whisplay">PiSugar/Whisplay — GitHub</a></li>
+      <li>This repository's own code: <code>runtime/whisplay.py</code>, <code>runtime/whisplay_client.py</code>, <code>example/test.py</code>, <code>daemon/skills/create-app/SKILL.md</code></li>
+    </ul>
+    <p class="colophon">Whisplay HAT — Student Guide · specs verified against PiSugar docs &amp; repo source, July 2026</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+    var map = {};
+    links.forEach(function (l) { map[l.getAttribute('href').slice(1)] = l; });
+    var sections = document.querySelectorAll('section[id]');
+    if (!('IntersectionObserver' in window) || !sections.length) return;
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          links.forEach(function (l) { l.classList.remove('active'); });
+          if (map[e.target.id]) {
+            map[e.target.id].classList.add('active');
+            map[e.target.id].setAttribute('aria-current', 'true');
+          }
+        }
+      });
+    }, { rootMargin: '-42% 0px -52% 0px' });
+    sections.forEach(function (s) { obs.observe(s); });
+  })();
+</script>
